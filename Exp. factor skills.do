@@ -10,7 +10,7 @@
 * This do-file is to create the summary statistics and run exploratory factor analysis 
 of skills to find whether there are factors that represent cognitive skills and 
 noncognitive skills. The factor analysis based on both Kaiser's eigenvalue rule 
-and scree tests. The main analysis for the paper is done in MATLAB.
+and scree tests. The main analysis for the paper is done in R and MATLAB.
 * You need to change the directories to your own specifications in order to run.
 * Data: The raw data was provided by Young Lives. I selected variables used in the paper 
 and cleaned the data. The dataanalysis.dta is the final cleaned data.
@@ -279,3 +279,4 @@ export delimited using Outcomes.csv, replace nolabel
 
 ********************************************************************************
 sjlog close, replace
+
