@@ -1,40 +1,39 @@
 
 **============================================================================**
 /*
-This do-file is to calculate parental investments and human capital for the job market paper
-"Parental Investment and Child Development": 
 
+This do-file is to calculate parental investments and parental human capital for
+the job market paper "Parental Investment and Child Development": 
 
 1. parental investments (Expenditure on the Young Lives child, 
 Number of hours studying outside school as a proxy for the time that parents dedicate
 to the child, and Quality of relationship between child and
 parents)
 
-2. Prental human capital (Cognitive skills, noncognitive skills and health )
-*/
+2. Prental human capital (Cognitive skills, noncognitive skills and health)
 
+*/
 
 clear all
 macro drop _all
-set mem 500m
-
-set more off
 mata: mata clear
+set mem 500m
+set more off
 capture log close
 
 sjlog using "Parental education", replace
 
 cd "~/Desktop/Github/Young Lives"
 
-
 ********************************************************************************
+
           ********* EXPENDITURE ON THE YOUNG LIVE CHILD *************
+		  
 ******************************************************************************** 
 
 ********************************************************************************
-** EXPENDITURE - ROUND 3**
+                   ** EXPENDITURE - ROUND 3**
 ********************************************************************************
-
 
 use R3/vn_oc_householdlevel.dta, clear
 
@@ -44,7 +43,7 @@ recode SPYRR312 SPYRR311 SPYRR314 SPYRR313 SPYRR315 SPYRR310 SPYRR309 SPYRR303 S
 recode SPNMR312 SPNMR311 SPNMR314 SPNMR313 SPNMR315 SPNMR310 SPNMR309 SPNMR303 SPNMR304 SPNMR307 SPNMR308 (77=.) (79=.) (88=.) (99=.)
 
 recode EVNTR301 EVNTR312 EVNTR313 EVNTR347  EVNTR314 EVNTR316 EVNTR324 EVNTR325 EVNTR328 EVNTR329 EVNTR331 EVNTR348 EVNTR337 EVNTR338 EVNTR339 (77=.) (79=.) (88=.) (99=.)
-*recode EVNTR301 EVNTR312 EVNTR313 EVNTR347  EVNTR314 EVNTR316 EVNTR324 EVNTR325 EVNTR328 EVNTR329 EVNTR331 EVNTR348 EVNTR337 EVNTR338 EVNTR339 (.=0) 
+
 recode EVNTR301 EVNTR310 EVNTR312 EVNTR313 EVNTR347 EVNTR314 EVNTR316 EVNTR323 ///
 EVNTR324 EVNTR325 EVNTR326 EVNTR327 EVNTR328 EVNTR329 EVNTR330 EVNTR331 EVNTR348 ///
 EVNTR332 EVNTR334 EVNTR335 EVNTR336 EVNTR337 EVNTR338 EVNTR339 EVNTR340 EVNTR341 EVNTR342 EVNTR345  (77=.) (79=.) (88=.) (99=.)
@@ -54,16 +53,10 @@ recode EVNTR301 EVNTR310 EVNTR312 EVNTR313 EVNTR347 EVNTR314 EVNTR316 EVNTR323 /
 EVNTR324 EVNTR325 EVNTR326 EVNTR327 EVNTR328 EVNTR329 EVNTR330 EVNTR331 EVNTR348 ///
 EVNTR332 EVNTR334 EVNTR335 EVNTR336 EVNTR337 EVNTR338 EVNTR339 EVNTR340 EVNTR341 EVNTR342 EVNTR345  (.=0) 
 
-/*
-recode EVNTR301 EVNTR310 EVNTR312 EVNTR313 EVNTR347 EVNTR314 EVNTR316 EVNTR323 ///
-EVNTR324 EVNTR325 EVNTR326 EVNTR327 EVNTR328 EVNTR329 EVNTR330 EVNTR331 EVNTR348 ///
-EVNTR332 EVNTR334 EVNTR335 EVNTR336 EVNTR337 EVNTR338 EVNTR339 EVNTR340 EVNTR341 EVNTR342 EVNTR345
-*/
 *********************************************
 
-*********************************************
 capture program drop cfee3
-program define cfee3 /* arguments are amount timeunit dayswk hoursdy yramt */
+program define cfee3 /* arguments*/
 
   gen `6'=`1' if `3'==2&`4'==4
   replace `6'=`1'*0.75 if `3'==2&`4'==3
@@ -101,7 +94,7 @@ cfee3 SPYRR307 SPYRR308 SEX SPNMR307 SPNMR308 shoes3
 *********************************************
 
 capture program drop cbooks3
-program define cbooks3 /* arguments are amount timeunit dayswk hoursdy yramt */
+program define cbooks3 /* arguments */
 
   gen `3'=`1' if `2'==4
   replace `3'=`1'*0.75 if `2'==3
@@ -142,29 +135,20 @@ EVNTR324 EVNTR325 EVNTR326 EVNTR327 EVNTR328 EVNTR329 EVNTR330 EVNTR331 EVNTR348
 EVNTR332 EVNTR334 EVNTR335 EVNTR336 EVNTR337 EVNTR338 EVNTR339 EVNTR340 EVNTR341 EVNTR342 EVNTR345 ///
 EVNTR312 EVNTR313 EVNTR314 EVNTR324 EVNTR325 EVNTR328 EVNTR329 EVNTR337 EVNTR338 EVNTR339 EVNTR316
 
-
 tempfile  exp3
 save     `exp3'	
 
-*/ save "~/Documents/Thesis/T2/Output/finalmatlab/exinvest3", replace
-
-
-
 ********************************************************************************
-**EXPENDITURE - ROUND 2**
+                      ** EXPENDITURE - ROUND 2**
 ********************************************************************************
-
 
 use R2/vnchildlevel12yrold.dta, clear
 
 rename CHILDID childid
 
-
 recode SPYR12 SPYR11 SPYR14 SPYR13 SPYR15 SPYR10 SPYR09 SPYR03 SPYR04 SPYR07 SPYR08 (-77=.) (-79=.) (-88=.) (-99=.) (-8=.)
 recode SPNAME12 SPNAME11 SPNAME14 SPNAME13 SPNAME15 SPNAME10 SPNAME09 SPNAME03 SPNAME04 SPNAME07 SPNAME08 (77=.) (79=.) (88=.) (99=.)
 
-
-*********************************************
 *********************************************
 capture program drop cfee2
 program define cfee2 /* arguments are amount timeunit dayswk hoursdy yramt */
@@ -202,7 +186,7 @@ cfee2 SPYR07 SPYR08 SEX SPNAME07 SPNAME08 shoes2
 *.2.** Books 2
 *********************************************
 capture program drop cbooks2
-program define cbooks2 /* arguments are amount timeunit dayswk hoursdy yramt */
+program define cbooks2 /* arguments */
 
   gen `3'=`1' if `2'==4
   replace `3'=`1'*0.75 if `2'==3
@@ -214,7 +198,6 @@ mvencode `3', mv(0) override
 end
 
 cbooks2 SPYR15 SPNAME15 books2
-
 
 *********************************************
 ** TOTAL EXPENDITURE - ROUND  2
@@ -239,14 +222,12 @@ save     `exp2'
 */ save "~/Documents/Thesis/T2/Output/finalmatlab/exinvest2", replace
 
 
-
-
-
 ********************************************************************************
 
 ********* NUMBER OF HOURS STUDYING OUTSIDE SCHOOL and QUALITY OF RELATION ******
 
 ******************************************************************************** 
+
 
 ********************************************************************************
 ** Study outside school - Round 3**
@@ -265,7 +246,7 @@ label var timeinvest3 "Study hours outside school"
 egen double ztimeinvest3 = std(timeinvest3)
 
 ********************************************************************************
-**Quality of relationship between child and parents - Round 3**
+** Quality of relationship between child and parents - Round 3 **
 ********************************************************************************
 
 recode SPVIEWR3 TRFAIRR3 (3=1)(1=3)
@@ -298,7 +279,7 @@ drop _merge
 save Output/invest3, replace
 
 ********************************************************************************
-**Study outside school - Round 2**
+** Study outside school - Round 2 **
 ********************************************************************************
 
 
@@ -315,7 +296,7 @@ label var timeinvest2 "Study hours outside school"
 egen double ztimeinvest2 = std(timeinvest2)
 
 ********************************************************************************
-**Quality of relationship between child and parents - Round 2**
+** Quality of relationship between child and parents - Round 2 **
 ********************************************************************************
 recode OBEY LOVED SPEAK FAIRPUN TIMATT (4=1) (3=2) (2=3) (1=4) 
  
@@ -356,9 +337,8 @@ save Output/invest2, replace
 		  
 ******************************************************************************** 
 
-
 ********************************************************************************
-**Parental - Caregiver Non-cognitive - Round 3**
+** Parental - Caregiver Non-cognitive - Round 3 **
 ********************************************************************************
 
 
@@ -418,7 +398,7 @@ save Output/pncog3, replace
 
 
 ********************************************************************************
-**Parental - Caregiver Non-cognitive - Round 2**
+** Parental - Caregiver Non-cognitive - Round 2 **
 ********************************************************************************
 
 
@@ -492,7 +472,7 @@ save Output/pncog2, replace
 *===============================================================================
 *===============================================================================
 ********************************************************************************
-          *********Parental - Health - Take Round 2*************
+          ********* Parental - Health - Take Round 2*************
 ******************************************************************************** 
 
 
@@ -712,7 +692,7 @@ label values momedu educ1
 			
 drop if round!=3	
 keep childid momedu 		
-save momedu, replace	
+save Output/momedu, replace	
 
 			
 ********************************************************************************
@@ -891,12 +871,12 @@ label var dadedu		"Father's level of education"
 			
 drop if round!=3
 keep childid dadedu			
-save dadedu, replace	
+
+save Output/dadedu, replace	
 
 merge 1:1 childid using momedu 
 drop _merge
 
-save /momdadedu, replace
 
 use vietnam_constructed.dta, clear
 drop if round!=3
@@ -946,6 +926,6 @@ replace dadedu=16 if dadedu==14
 replace momedu=14 if momedu==13
 replace momedu=16 if momedu==14
 
-save output/paredu, replace
+save Output/paredu, replace
 
 sjlog close, replace
